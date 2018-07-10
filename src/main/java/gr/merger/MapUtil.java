@@ -1,11 +1,27 @@
 package gr.merger;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 public class MapUtil {
-	public static <K, V> Map<K, V> merge(Map<K, V> map1, Map<K, V> map2, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
-		map1.forEach((k, v) -> map2.merge(k, v, remappingFunction));
-		return map2;
+
+	/**
+	 *
+	 * @param map1
+	 * @param map2
+	 * @param combiner
+	 * @param <K>
+	 * @param <V>
+	 * @return
+	 */
+	public static <K, V> Map<K, V> merge(
+			Map<K, V> map1,
+			Map<K, V> map2,
+			BinaryOperator<V> combiner) {
+		// TODO Подумать какую мапу клонировать
+		Map<K, V> map3 = new HashMap<>(map1);
+		map2.forEach((k, v) -> map3.merge(k, v, combiner));
+		return map3;
 	}
 }
