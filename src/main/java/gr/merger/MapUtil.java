@@ -1,10 +1,17 @@
 package gr.merger;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BinaryOperator;
 
 public class MapUtil {
+
+	public static <K, V> Map<K, V> mergeMaps(List<Map<K, V>> maps, BinaryOperator<V> combiner) {
+		return maps.stream().parallel().reduce((m1, m2) -> merge(m1, m2, combiner)).orElse(Collections.emptyMap());
+
+	}
 
 	/**
 	 * @param map1
