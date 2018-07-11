@@ -25,7 +25,7 @@ public class MapUtilTest {
 	}
 
 	@Test
-	public void mergeStringTest(){
+	public void mergeStringTest() {
 		Map<String, String> map1 = new HashMap<>();
 		Map<String, String> map2 = new HashMap<>();
 		map1.put("key1", "A1");
@@ -34,6 +34,27 @@ public class MapUtilTest {
 		map2.put("key1", "B1");
 
 		Map<String, String> concatenated = MapUtil.merge(map1, map2, String::concat);
-		Assert.assertEquals("A1B1",  concatenated.get("key1"));
+		Assert.assertEquals("A1B1", concatenated.get("key1"));
+	}
+
+	@Test
+	public void bigMapTest() {
+		Map<String, Integer> map1 = getRandom(3000000);
+		Map<String, Integer> map2 = getRandom(4);
+		long tStart = System.currentTimeMillis();
+		Map<String, Integer> summarized = null;
+		for (int i = 0; i < 100; i++) {
+			summarized = MapUtil.merge(map1, map2, Integer::sum);
+		}
+		long tEnd = System.currentTimeMillis();
+		System.out.println(tEnd - tStart + " ms " + summarized.size());
+	}
+
+	private Map<String, Integer> getRandom(int size) {
+		HashMap<String, Integer> map = new HashMap<>(size);
+		for (int i = 0; i < size; i++) {
+			map.put("k" + i, i);
+		}
+		return map;
 	}
 }

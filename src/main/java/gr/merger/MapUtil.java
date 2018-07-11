@@ -7,7 +7,6 @@ import java.util.function.BinaryOperator;
 public class MapUtil {
 
 	/**
-	 *
 	 * @param map1
 	 * @param map2
 	 * @param combiner
@@ -15,13 +14,20 @@ public class MapUtil {
 	 * @param <V>
 	 * @return
 	 */
-	public static <K, V> Map<K, V> merge(
-			Map<K, V> map1,
-			Map<K, V> map2,
-			BinaryOperator<V> combiner) {
-		// TODO Подумать какую мапу клонировать
-		Map<K, V> map3 = new HashMap<>(map1);
-		map2.forEach((k, v) -> map3.merge(k, v, combiner));
-		return map3;
+	public static <K, V> Map<K, V> merge(Map<K, V> map1, Map<K, V> map2,
+										 BinaryOperator<V> combiner) {
+		Map<K, V> bigMap;
+		Map<K, V> smallMap;
+		if (map1.size() > map2.size()) {
+			bigMap = map1;
+			smallMap = map2;
+		} else {
+			bigMap = map2;
+			smallMap = map1;
+		}
+
+		Map<K, V> resultMap = new HashMap<>(bigMap);
+		smallMap.forEach((k, v) -> resultMap.merge(k, v, combiner));
+		return resultMap;
 	}
 }
