@@ -3,10 +3,14 @@ package gr.merger;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.joining;
 
 public class MapUtilTest {
 
@@ -55,9 +59,10 @@ public class MapUtilTest {
 				getFilledMap(5),
 				getFilledMap(6));
 
+
 //		System.out.println(maps);
 		Map<String, Integer> result = MapUtil.mergeMaps(maps, Integer::sum);
-//		System.out.println(result);
+		System.out.println(result);
 		Assert.assertEquals(0, (int) result.get("k0"));
 		Assert.assertEquals(5, (int) result.get("k1"));
 		Assert.assertEquals(8, (int) result.get("k2"));
@@ -87,5 +92,38 @@ public class MapUtilTest {
 			map.put("k" + i, i);
 		}
 		return map;
+	}
+
+	@Test
+	public void asdf(){
+//		List<String> lst = Arrays.asList("a","a","a","a","a","a","a");
+//		long sdf = lst.stream().reduce()
+//		System.out.println(sdf);
+
+//		int[] asd = IntStream.range(0, 100).parallel().map(x -> x * 2).toArray();
+//		for (int i : asd) {
+//			System.out.println(i);
+//		}
+
+
+
+//		List<String> l = new ArrayList(Arrays.asList("one", "two"));
+//		Stream<String> sl = l.stream();
+//		l.add("three");
+//		String s = sl.collect(joining(" "));
+//		System.out.println(s);
+
+//		List<String> lst = Arrays.asList("a","a","a","a","a","a","a");
+//		Set<String> seen = new HashSet<>();
+//		List<String> res = lst.stream().parallel().map(e -> {
+//			if (seen.add(e))
+//				return e+"-1";
+//			else
+//				return e+"-0";
+//		}).collect(Collectors.toList());
+//		System.out.println(res);
+
+
+
 	}
 }

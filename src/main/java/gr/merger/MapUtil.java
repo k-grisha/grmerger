@@ -1,15 +1,29 @@
 package gr.merger;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BinaryOperator;
+import java.util.stream.Collector;
 
 public class MapUtil {
 
 	public static <K, V> Map<K, V> mergeMaps(List<Map<K, V>> maps, BinaryOperator<V> combiner) {
-		return maps.stream().parallel().reduce((m1, m2) -> merge(m1, m2, combiner)).orElse(Collections.emptyMap());
+//		return maps.stream().parallel().reduce((m1, m2) -> merge(m1, m2, combiner)).orElse(Collections.emptyMap());
+		final Map<K, V> accumulationMap = new ConcurrentHashMap<>();
+
+		Collector<Map<K, V>, Map<K, V>, Map<K, V>> collector = Collector.of(() -> accumulationMap
+				, (map, element) -> merge(map, element, combiner)    //accumulator
+				, ((right, left) -> accumulationMap)
+				, Collector.Characteristics.CONCURRENT, Collector.Characteristics.UNORDERED);
+
+		Map<K, V> asd = maps.stream()
+				.collect(collector);
+
+		return asd;
+		//.orElse(Collections.emptyMap());
 
 	}
 
