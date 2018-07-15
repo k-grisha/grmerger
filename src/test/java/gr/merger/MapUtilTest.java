@@ -58,7 +58,6 @@ public class MapUtilTest {
 		});
 	}
 
-
 	@Test
 	public void approachComparisonTest() {
 		int mapSize = 500;
@@ -69,15 +68,15 @@ public class MapUtilTest {
 
 		Map<String, Integer> result1 = null;
 		Map<String, Integer> result2 = null;
-		long t1 = System.currentTimeMillis();
+		final long t1 = System.currentTimeMillis();
 		for (int i = 0; i < repeats; i++) {
 			result1 = MapUtil.immutableMergeMaps(maps, Integer::sum);
 		}
-		long t2 = System.currentTimeMillis();
+		final long t2 = System.currentTimeMillis();
 		for (int i = 0; i < repeats; i++) {
 			result2 = MapUtil.mutableMergeMaps(maps, Integer::sum);
 		}
-		long t3 = System.currentTimeMillis();
+		final long t3 = System.currentTimeMillis();
 
 		System.out.println(String.format("First approach take %s ms\nSecond approach take %s ms ", (t2 - t1), (t3 - t2)));
 		Assert.assertEquals(result1.size(), result2.size());

@@ -63,36 +63,4 @@ public class MapUtil {
 		map.forEach((k, v) -> accumulator.merge(k, v, combiner));
 	}
 
-
-	public static <K, V> Map<K, V> mergeMaps12(List<Map<K, V>> maps, BinaryOperator<V> combiner) {
-//		Map<K, V> asd = maps.stream().parallel().reduce((m1, m2) -> merge(m1, m2, combiner)).orElse(Collections.emptyMap());
-
-//		Collector<Map<K, V>, Map<K, V>, Map<K, V>> collector = Collector.of(HashMap::new
-//				, (Map<K, V> map, Map<K, V> element) -> map.putAll(merge(map, element, combiner))
-//				, (right, left) -> merge(right, left, combiner));
-
-//		Map<K, V> accumulationMap = new ConcurrentHashMap<>();
-//		Collector<Map<K, V>, Map<K, V>, Map<K, V>> collector = Collector.of(
-//				ConcurrentHashMap::new
-//				, (map, element) -> map.putAll(merge(map, element, combiner))
-//				, (right, left) -> merge(right, left, combiner)
-//				, Collector.Characteristics.CONCURRENT, Collector.Characteristics.UNORDERED);
-//		Map<K, V> asd = maps.parallelStream().collect(collector);
-
-
-//		Map<K, V> asd = maps.parallelStream().collect(
-//				HashMap::new
-//				, (Map<K, V> map, Map<K, V> element) -> map.putAll(merge(map, element, combiner))
-//				, (right, left) -> merge(right, left, combiner));
-
-
-		Map<K, V> asd = maps.parallelStream().collect(
-				HashMap::new
-				, (Map<K, V> map, Map<K, V> element) -> map.putAll(merge(map, element, combiner))
-				, (right, left) -> merge(right, left, combiner));
-
-		return asd;
-	}
-
-
 }
