@@ -42,30 +42,47 @@ public class MapUtilTest {
 	}
 
 	@Test
-	public void repeater() {
-		for (int i = 0; i < 100000; i++) {
-			listOfMapTest();
-		}
-	}
-
-
-	@Test
-	public void listOfBigMapTest() {
-		List<Map<String, Integer>> maps = new ArrayList<>();
-
-		IntStream.range(0, 4000).forEach(i -> maps.add(getFilledMap(i)));
-
-		long tStart = System.currentTimeMillis();
-		Map<String, Integer> result = MapUtil.mergeMaps(maps, Integer::sum);
-		long tEnd = System.currentTimeMillis();
-		System.out.println(tEnd - tStart + " ms " + result.size());
-
-	}
-
-	@Test
 	public void listOfMapTest() {
-		int mapSize = 55;
-		int listSize = 1111;
+		int mapSize = 505;
+		int listSize = 999;
+		List<Map<String, Integer>> maps = getFilledMap(listSize, mapSize);
+
+		// Approach 1
+		Map<String, Integer> result = MapUtil.mutableMergeMaps(maps, Integer::sum);
+		// Approach 2
+		Map<String, Integer> result2 = MapUtil.immutableMergeMaps(maps, Integer::sum);
+
+		IntStream.range(1, mapSize + 1).forEach(i -> {
+			Assert.assertEquals(i * listSize, (int) result.get("k" + i));
+			Assert.assertEquals(i * listSize, (int) result2.get("k" + i));
+		});
+	}
+
+	private static List<Map<String, Integer>> getFilledMap(int listSize, int mapSize) {
+		List<Map<String, Integer>> maps = new ArrayList<>(listSize);
+		IntStream.range(1, listSize + 1).forEach(i -> {
+			Map<String, Integer> map = new HashMap<>(mapSize);
+			IntStream.range(1, mapSize + 1).forEach(z -> map.put("k" + z, z));
+			maps.add(map);
+		});
+		return maps;
+	}
+
+	@Test
+	public void approachComparationTest() {
+		int mapSize = 505;
+		int listSize = 999;
+
+		List<Map<String, Integer>> maps1 = getFilledMap(listSize, mapSize);
+
+
+	}
+
+
+	@Test
+	public void listOfMapTestBig() {
+		int mapSize = 505;
+		int listSize = 999;
 		List<Map<String, Integer>> maps = new ArrayList<>(listSize);
 		IntStream.range(1, listSize + 1).forEach(i -> {
 			Map<String, Integer> map = new HashMap<>(mapSize);
@@ -73,12 +90,41 @@ public class MapUtilTest {
 			maps.add(map);
 		});
 
-		Map<String, Integer> result = MapUtil.mergeMaps(maps, Integer::sum);
+		Map<String, Integer> result = null;
+		long t1 = System.currentTimeMillis();
+		for (int i = 0; i < 1000; i++) {
+			result = MapUtil.mutableMergeMaps(maps, Integer::sum);
+		}
+		long t2 = System.currentTimeMillis();
 
-		IntStream.range(1, mapSize + 1).forEach(i -> {
-			Assert.assertEquals(i * listSize, (int) result.get("k" + i));
-		});
+		Map<String, Integer> result2 = null;
+		for (int i = 0; i < 1000; i++) {
+			result2 = MapUtil.immutableMergeMaps(maps, Integer::sum);
+		}
+		long t3 = System.currentTimeMillis();
+
+		System.out.println((t2 - t1) + "   " + (t3 - t2));
+
+		System.out.println(result.size() + "  " + result2.size());
+
+//		IntStream.range(1, mapSize + 1).forEach(i -> {
+//			Assert.assertEquals(i * listSize, (int) result.get("k" + i));
+//		});
 	}
+
+
+//	@Test
+//	public void listOfBigMapTest() {
+//		List<Map<String, Integer>> maps = new ArrayList<>();
+//
+//		IntStream.range(0, 4000).forEach(i -> maps.add(getFilledMap(i)));
+//
+//		long tStart = System.currentTimeMillis();
+//		Map<String, Integer> result = MapUtil.mergeMaps(maps, Integer::sum);
+//		long tEnd = System.currentTimeMillis();
+//		System.out.println(tEnd - tStart + " ms " + result.size());
+//
+//	}
 
 
 	@Test
