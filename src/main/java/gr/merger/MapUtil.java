@@ -32,15 +32,30 @@ public class MapUtil {
 		return resultMap;
 	}
 
-
+	/**
+	 * Bonus part
+	 * merging a list of maps based on a immutable merge-method result from the task
+	 *
+	 * @param maps     list of maps
+	 * @param combiner merging behavior
+	 * @return result map
+	 */
 	public static <K, V> Map<K, V> immutableMergeMaps(List<Map<K, V>> maps, BinaryOperator<V> combiner) {
 		return maps.parallelStream().reduce(Collections.emptyMap(), (m1, m2) -> merge(m1, m2, combiner));
 	}
 
+	/**
+	 * Bonus part
+	 * merging a list of maps based on a mutable merge-method result
+	 *
+	 * @param maps     list of maps
+	 * @param combiner merging behavior
+	 * @return result map
+	 */
 	public static <K, V> Map<K, V> mutableMergeMaps(List<Map<K, V>> maps, BinaryOperator<V> combiner) {
 		return maps.parallelStream().collect(
 				HashMap::new,
-				(map, element) -> accumulate(map, element, combiner),
+				(accumulator, element) -> accumulate(accumulator, element, combiner),
 				(m1, m2) -> accumulate(m1, m2, combiner));
 	}
 
